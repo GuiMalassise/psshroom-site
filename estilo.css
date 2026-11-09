@@ -1,0 +1,220 @@
+:root { color-scheme: light; --laranja: #f05a28; --verde-lima: #c7f25b; --azul-bebe: #a8d8f0; --off-white: #f7f5ef; --marrom: #49382f; --magenta-vinho: #8f164f; --preto-quente: #0e0e0e; --cinza-escuro: #171717; --branco: #ffffff; --fundo: var(--off-white); --fundo-cartao: var(--branco); --texto: var(--marrom); --borda: var(--marrom); --foco: var(--marrom); --acento: var(--laranja); --texto-sobre-acento: var(--preto-quente); --tag-lacrado: var(--verde-lima); --tag-decant: var(--azul-bebe); --tag-travel: var(--magenta-vinho); --texto-tag: var(--marrom); --campanha: var(--magenta-vinho); --texto-sobre-campanha: var(--branco); --sobrelinha: var(--magenta-vinho); --destaque-fundo: var(--marrom); --texto-sobre-destaque: var(--branco); --acorde-almiscarado: #ded5e5; --acorde-aldeidico: #d8e6eb; --acorde-citrico: #d5df42; --acorde-floral-branco: #e8e7df; --acorde-atalcado: #f0e2d5; --acorde-fresco: #65bdeb; --acorde-amadeirado: #88542d; --acorde-saboneteado: #c7e1db; --acorde-doce: #c53d48; --acorde-ambar: #e0a23c; --acorde-couro: #6b4a3a; --acorde-especiado: #b5452b; --acorde-aquatico: #5bb6d6; --acorde-frutado: #f28b95; --acorde-verde: #7dbf63; --acorde-oud: #4a2e2a; --acorde-baunilha: #f1e0b5; --acorde-rosa: #e98aae; --acorde-tabaco: #8a5a3b; --acorde-floral: #f4b4cb; --acorde-terroso: #7d6b4f; --acorde-defumado: #6e6a6a; --acorde-aromatico: #9cc7ae; --acorde-lavanda: #bca8dc; --acorde-ozonico: #c4e2ec; --acorde-balsamico: #93622f; --acorde-tropical: #f6c04a; --sombra-card: 0 1px 3px rgba(73, 56, 47, 0.12); --sombra-ficha: 0 12px 32px rgba(73, 56, 47, 0.22); --espaco-1: 4px; --espaco-2: 8px; --espaco-4: 16px; --espaco-6: 24px; --espaco-8: 32px; --raio-tag: 6px; --raio-botao: 999px; --raio-card: 16px; --toque-minimo: 44px; --font-titulo: "Bricolage Grotesque", system-ui, sans-serif; --font-texto: Figtree, system-ui, sans-serif; }
+@font-face { font-family: "Bricolage Grotesque"; src: url("/fontes/bricolage.woff2") format("woff2"); font-weight: 200 800; font-display: swap; }
+@font-face { font-family: "Figtree"; src: url("/fontes/figtree.woff2") format("woff2"); font-weight: 300 900; font-display: swap; }
+
+/* Uma família de cor só: o laranja. Forte em botões e detalhes; a areia é ele diluído, puxado para o âmbar. */
+:root {
+  --curva: cubic-bezier(.2, .8, .2, 1);
+  --pessego: color-mix(in srgb, color-mix(in srgb, var(--laranja) 40%, var(--acorde-ambar)) 30%, var(--fundo));
+  --pessego-claro: color-mix(in srgb, color-mix(in srgb, var(--laranja) 40%, var(--acorde-ambar)) 12%, var(--fundo));
+  --sombra-suave: 0 18px 50px color-mix(in srgb, var(--marrom) 13%, transparent);
+  --sombra-botao: 0 8px 20px color-mix(in srgb, var(--laranja) 30%, transparent);
+  --sombra-celular: 0 30px 70px color-mix(in srgb, var(--marrom) 32%, transparent);
+  --raio-painel: calc(var(--raio-card) * 1.5);
+  --largura-celular: clamp(240px, 24vw, 300px);
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--fundo); color: var(--texto); font: 400 15px/22px var(--font-texto); }
+img { display: block; max-width: 100%; height: auto; }
+a { color: inherit; text-decoration-color: var(--laranja); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--foco); outline-offset: 2px; }
+h1, h2, h3, p { margin: 0; }
+h1, h2, h3 { font-family: var(--font-titulo); font-weight: 600; }
+
+.previa { padding: var(--espaco-2) var(--espaco-4); background: var(--fundo-cartao); box-shadow: var(--sombra-card); text-align: center; font-size: 13px; line-height: 18px; }
+mark { padding: 0 var(--espaco-1); border-radius: var(--raio-tag); background: var(--pessego); color: var(--texto); }
+
+.topo, .rodape, .grade, .pagina { max-width: 1240px; margin-inline: auto; padding-inline: clamp(16px, 3vw, 32px); }
+.topo { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0 var(--espaco-4); padding-block: var(--espaco-2); }
+.logo { display: flex; align-items: center; gap: var(--espaco-2); min-height: var(--toque-minimo); }
+.logo img { width: auto; height: 32px; }
+.logo img + img { height: 24px; }
+.topo nav { display: flex; gap: var(--espaco-6); }
+.topo nav a { display: flex; align-items: center; min-height: var(--toque-minimo); text-decoration: none; }
+.topo nav a:hover, .topo nav a[aria-current] { text-decoration: underline; text-decoration-color: var(--laranja); text-decoration-thickness: 2px; text-underline-offset: 6px; }
+
+.botao { display: inline-flex; align-items: center; min-height: var(--toque-minimo); padding: 0 var(--espaco-6); border-radius: var(--raio-botao); background: var(--acento); box-shadow: var(--sombra-botao); color: var(--texto-sobre-acento); font-weight: 600; text-decoration: none; transition: translate 200ms var(--curva); }
+.botao:hover { translate: 0 -2px; }
+.botao:active { scale: .98; }
+
+/* Início */
+.grade { padding-block: var(--espaco-2) var(--espaco-8); }
+.sobrelinha { color: var(--sobrelinha); font: 800 11px/16px var(--font-texto); letter-spacing: .12em; text-transform: uppercase; }
+
+/* Abertura: o texto no centro e, embaixo, o celular saindo de uma explosão de frascos de verdade. */
+.abertura { overflow: hidden; padding-top: clamp(32px, 5vw, 64px); border-radius: var(--raio-painel); background: linear-gradient(180deg, var(--pessego-claro), var(--pessego)); text-align: center; }
+.abertura-texto { position: relative; z-index: 2; padding-inline: var(--espaco-6); }
+.abertura h1 { max-width: 12em; margin: var(--espaco-2) auto 0; font-size: clamp(44px, 6.4vw, 84px); line-height: 1; letter-spacing: -.035em; }
+.lide { max-width: 32em; margin: var(--espaco-4) auto var(--espaco-6); font-size: 18px; line-height: 26px; }
+/* Uma borrifada: os frascos saem de trás do celular num leque (--ax, --ay), desaceleram no ar como gotas
+   e assentam devagar numa pilha dos lados e atrás dele (--x, --y). A névoa sai junto e se desfaz. */
+.palco { --u: 1cqw; position: relative; container-type: inline-size; display: grid; justify-items: center; margin-top: clamp(24px, 4vw, 48px); }
+.explosao { position: absolute; inset: 0; z-index: 0; }
+.frasco { position: absolute; left: 50%; top: 52%; height: clamp(52px, calc(var(--h) * var(--u)), 160px); translate: calc(var(--x) * var(--u) - 50%) calc(var(--y) * var(--u) - 50%); rotate: var(--r); animation: explode var(--t) var(--d) both; }
+.frasco img { height: 100%; width: auto; filter: drop-shadow(0 10px 14px color-mix(in srgb, var(--marrom) 22%, transparent)); }
+@keyframes explode {
+  0% { translate: -50% calc(-8 * var(--u) - 50%); scale: .3; rotate: 0deg; opacity: 0; animation-timing-function: cubic-bezier(.08, .7, .25, 1); }
+  10% { opacity: 1; }
+  42% { translate: calc(var(--ax) * var(--u) - 50%) calc(var(--ay) * var(--u) - 50%); scale: 1; rotate: var(--ar); animation-timing-function: cubic-bezier(.4, 0, .3, 1); }
+}
+.nevoa { position: absolute; z-index: 1000; left: 50%; top: 52%; width: calc(var(--s) * var(--u)); aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, color-mix(in srgb, var(--branco) 80%, transparent), transparent 68%); opacity: 0; translate: calc(var(--x) * var(--u) - 50%) calc(var(--y) * var(--u) - 50%); scale: 1.8; animation: nevoa var(--t) var(--d) cubic-bezier(.1, .7, .3, 1) both; }
+@keyframes nevoa { from { translate: -50% calc(-8 * var(--u) - 50%); scale: .2; opacity: 0; } 18% { opacity: .85; } }
+
+/* Celular */
+.celular { position: relative; padding: 10px; border-radius: 44px; background: var(--preto-quente); box-shadow: var(--sombra-celular), inset 0 0 0 1px color-mix(in srgb, var(--off-white) 22%, transparent); }
+.celular-grande { position: relative; width: var(--largura-celular); margin-bottom: -120px; z-index: 1; }
+.tela { position: relative; overflow: hidden; aspect-ratio: 750 / 1624; border-radius: 34px; background: var(--off-white); }
+.tela img { width: 100%; }
+.camada-tela { position: absolute; inset: 0; overflow: hidden; background: var(--off-white); }
+
+/* O celular navega sozinho, em volta de 26 s. O feed fica por baixo; as outras telas entram por cima. */
+.ficha { translate: 100% 0; animation: ficha-entra 26s var(--curva) infinite; }
+.ficha-longa { animation: ficha-rola 26s ease-in-out infinite; }
+.ficha-topo { position: absolute; inset: 0 0 auto; }
+.estante { opacity: 0; animation: estante-aparece 26s linear infinite; }
+.perfil { opacity: 0; animation: perfil-aparece 26s linear infinite; }
+.conversa { translate: 100% 0; animation: conversa-entra 26s var(--curva) infinite; }
+.toque { position: absolute; left: var(--x); top: var(--y); width: 11%; aspect-ratio: 1; margin: -5.5% 0 0 -5.5%; border-radius: 50%; background: color-mix(in srgb, var(--marrom) 45%, transparent); box-shadow: 0 0 0 2px color-mix(in srgb, var(--branco) 70%, transparent); opacity: 0; animation: toca 26s var(--t) infinite; }
+.celular-grande:hover * { animation-play-state: paused; }
+@keyframes ficha-entra { 0%, 15.4% { translate: 100% 0; } 16.9%, 40.8% { translate: 0 0; } 42.3%, 100% { translate: 100% 0; } }
+@keyframes ficha-rola { 0%, 21.2% { translate: 0 0; } 34.6%, 42.3% { translate: 0 -25.6%; } 43%, 100% { translate: 0 0; } }
+@keyframes estante-aparece { 0%, 47.7% { opacity: 0; } 49.2%, 64.6% { opacity: 1; } 65%, 100% { opacity: 0; } }
+@keyframes perfil-aparece { 0%, 63.1% { opacity: 0; } 64.6%, 96.2% { opacity: 1; } 97.7%, 100% { opacity: 0; } }
+@keyframes conversa-entra { 0%, 78.5% { translate: 100% 0; opacity: 1; } 80%, 96.2% { translate: 0 0; opacity: 1; } 97.7% { translate: 0 0; opacity: 0; } 98%, 100% { translate: 100% 0; opacity: 0; } }
+@keyframes toca { 0% { opacity: 0; scale: 1.5; } 1% { opacity: 1; scale: 1; } 2.2% { opacity: 1; scale: .8; } 3%, 100% { opacity: 0; scale: 1; } }
+
+/* Seções: cada uma num painel com uma cor do logo, em tom claro; o texto de um lado e, do outro,
+   o celular com o cartão daquela parte saltando da tela. Topo é fresco, coração é floral, base é quente. */
+.secao { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: clamp(32px, 6vw, 96px); margin-top: var(--espaco-6); padding: clamp(40px, 6vw, 88px) clamp(24px, 6vw, 96px); border-radius: var(--raio-painel); background: var(--faixa); overflow-x: clip; scroll-margin-top: 32px; }
+.secao-lima { --faixa: color-mix(in srgb, var(--verde-lima) 24%, var(--fundo)); }
+.secao-azul { --faixa: color-mix(in srgb, var(--azul-bebe) 36%, var(--fundo)); }
+.secao-rosa { --faixa: color-mix(in srgb, var(--acorde-floral) 32%, var(--fundo)); }
+.secao-lavanda { --faixa: color-mix(in srgb, var(--acorde-lavanda) 30%, var(--fundo)); }
+.secao-ambar { --faixa: color-mix(in srgb, var(--acorde-ambar) 24%, var(--fundo)); }
+.secao-invertida .secao-texto { order: 2; }
+.secao h2, .fechamento h2 { font-size: clamp(34px, 4.7vw, 60px); line-height: 1.04; letter-spacing: -.03em; }
+.secao h2 { margin: var(--espaco-2) 0 var(--espaco-4); font-size: clamp(32px, 3.8vw, 52px); }
+/* A segunda linha do título fica apagada: a cor do texto meio transparente, para valer em qualquer faixa. */
+.apagado { color: color-mix(in srgb, currentColor 68%, transparent); }
+.legenda { margin-top: var(--espaco-2); text-align: center; font-size: 13px; line-height: 18px; }
+.secao-texto > p:not(.sobrelinha) { max-width: 30em; font-size: 17px; line-height: 26px; }
+.secao ul { max-width: 30em; margin: var(--espaco-6) 0 0; padding: 0; list-style: none; }
+.secao li { display: flex; gap: var(--espaco-4); padding-block: var(--espaco-2); }
+.secao li::before { content: ""; flex: none; width: 16px; height: 1px; margin-top: 11px; background: var(--laranja); }
+.vitrine { position: relative; display: grid; justify-items: center; padding-block: var(--espaco-6); }
+.celular-secao { z-index: 1; width: clamp(210px, 20vw, 260px); }
+.cartao-salta { z-index: 2; }
+
+/* A estante em destaque: um celular maior, com a estante sendo usada num laço de 16 s. */
+.celular-uso { width: clamp(240px, 24vw, 300px); }
+.celular-secao.celular-uso img { aspect-ratio: auto; border-radius: 0; object-fit: fill; }
+.uso-resumo { translate: 100% 0; animation: uso-resumo 16s var(--curva) infinite; }
+.uso-resumo-longo { animation: uso-rola 16s ease-in-out infinite; }
+.uso-quero { opacity: 0; animation: uso-quero 16s linear infinite; }
+.uso-toque { animation-duration: 16s; }
+.celular-uso:hover * { animation-play-state: paused; }
+@keyframes uso-resumo { 0%, 21.5% { translate: 100% 0; } 24%, 60.5% { translate: 0 0; } 63%, 100% { translate: 100% 0; } }
+@keyframes uso-rola { 0%, 37.5% { translate: 0 0; } 53%, 63% { translate: 0 -31.5%; } 64%, 100% { translate: 0 0; } }
+@keyframes uso-quero { 0%, 68% { opacity: 0; } 70%, 95% { opacity: 1; } 98%, 100% { opacity: 0; } }
+/* Atrás do celular: uma aura na cor da faixa, que respira, e frascos do tema da seção flutuando devagar. */
+.vitrine::before { content: ""; position: absolute; left: 50%; top: 50%; width: min(120%, 620px); aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, color-mix(in srgb, var(--faixa), var(--branco) 55%) 0%, transparent 65%); translate: -50% -50%; animation: respira 9s ease-in-out infinite alternate; }
+@keyframes respira { to { scale: 1.12; opacity: .75; } }
+.orbita { position: absolute; inset: 0; }
+.voa { position: absolute; left: calc(50% + var(--x)); top: calc(50% + var(--y)); height: var(--h); width: auto; translate: -50% -50%; rotate: var(--r); filter: drop-shadow(0 14px 18px color-mix(in srgb, var(--marrom) 20%, transparent)); animation: paira var(--v) ease-in-out infinite alternate; }
+@keyframes paira { to { transform: translateY(-16px) rotate(4deg); } }
+.celular-secao img { aspect-ratio: 750 / 1624; object-fit: cover; object-position: top; border-radius: 34px; }
+.cartao-salta { position: absolute; top: 50%; left: 50%; width: min(118%, 340px); height: auto; padding: 14px; border-radius: 20px; background: var(--fundo); box-shadow: 0 24px 60px color-mix(in srgb, var(--marrom) 26%, transparent); translate: -28% -50%; rotate: -2deg; }
+.secao-invertida .cartao-salta { translate: -72% -50%; rotate: 2deg; }
+@supports (animation-timeline: view()) {
+  /* O cartão fica sólido logo no começo e termina de saltar antes de entrar inteiro na tela: parado no meio, nunca fica transparente. */
+  .cartao-salta { animation: salta ease-out both; animation-timeline: view(); animation-range: entry 0% entry 80%; }
+  @keyframes salta { from { translate: -50% -40%; scale: .8; rotate: 0deg; opacity: 0; } 20% { opacity: 1; } }
+}
+
+/* Marcador lateral: desce pela pirâmide (topo, coração, base) enquanto a página rola. */
+.marcador { display: none; }
+@supports (animation-timeline: scroll()) {
+  .marcador { position: fixed; z-index: 5; right: clamp(12px, 2vw, 32px); top: 50%; display: grid; gap: 56px; padding-left: 20px; translate: 0 -50%; border-left: 1px solid color-mix(in srgb, var(--texto) 25%, transparent); font: 600 10px/14px var(--font-texto); letter-spacing: .12em; text-transform: uppercase; }
+  .marcador::before { content: ""; position: absolute; left: -4px; top: 0; width: 7px; height: 7px; border-radius: 50%; background: var(--laranja); animation: desce linear both; animation-timeline: scroll(root); }
+  @keyframes desce { to { top: calc(100% - 7px); } }
+}
+
+/* De fora: o app passa devagar, desfocado atrás de um vidro. É a única faixa escura da página. */
+.de-fora { position: relative; display: grid; place-items: center; overflow: hidden; min-height: clamp(520px, 60vw, 680px); margin-top: var(--espaco-6); padding: var(--espaco-8) var(--espaco-4); border-radius: var(--raio-painel); background: radial-gradient(120% 90% at 50% 40%, var(--marrom), var(--preto-quente)); color: var(--off-white); }
+.vidraca { position: absolute; inset: 0; display: flex; align-items: center; }
+/* O padding-right igual ao gap faz a metade da fila medir exatamente um período: o laço não salta. */
+.fila { --vao: clamp(24px, 4vw, 48px); display: flex; gap: var(--vao); padding-right: var(--vao); width: max-content; filter: blur(7px); opacity: .7; animation: desliza 70s linear infinite; }
+.celular-fora { flex: none; width: clamp(170px, 18vw, 240px); }
+.celular-fora:nth-child(odd) { rotate: -4deg; translate: 0 18px; }
+.celular-fora:nth-child(even) { rotate: 3deg; translate: 0 -14px; }
+.celular-fora img { aspect-ratio: 750 / 1624; object-fit: cover; object-position: top; border-radius: 34px; }
+@keyframes desliza { to { translate: -50% 0; } }
+.vidro { position: relative; max-width: 560px; padding: clamp(28px, 4vw, 48px); border: 1px solid color-mix(in srgb, var(--off-white) 18%, transparent); border-radius: var(--raio-painel); background: color-mix(in srgb, var(--preto-quente) 68%, transparent); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); text-align: center; }
+.de-fora .sobrelinha { color: var(--verde-lima); }
+.de-fora h2, .convites h2 { margin: var(--espaco-2) 0 var(--espaco-4); font-size: clamp(34px, 4.7vw, 60px); line-height: 1.04; letter-spacing: -.03em; }
+.vidro p:not(.sobrelinha) { font-size: 17px; line-height: 26px; }
+
+/* Os 10 convites: a faixa forte da página. Texto sobre laranja é sempre preto. */
+.convites { margin-top: var(--espaco-6); padding: clamp(48px, 7vw, 104px) clamp(24px, 6vw, 96px); border-radius: var(--raio-painel); background: var(--laranja); color: var(--texto-sobre-acento); text-align: center; }
+.convites .sobrelinha { color: var(--texto-sobre-acento); }
+.convites .numero { display: block; font-size: clamp(140px, 22vw, 280px); line-height: .9; letter-spacing: -.06em; }
+.convites p:not(.sobrelinha) { max-width: 32em; margin-inline: auto; font-size: 17px; line-height: 26px; }
+.bilhetes { display: flex; flex-wrap: wrap; justify-content: center; gap: clamp(8px, 1.5vw, 14px); margin: var(--espaco-8) 0 0; padding: 0; list-style: none; }
+.bilhetes li { width: clamp(26px, 3.4vw, 40px); aspect-ratio: 2 / 3; border-radius: 6px; background: var(--off-white); -webkit-mask: radial-gradient(circle 6px at 50% 0, transparent 95%, var(--preto-quente)); mask: radial-gradient(circle 6px at 50% 0, transparent 95%, var(--preto-quente)); }
+/* Com a rolagem, sete bilhetes são usados, um de cada vez; sobram três. */
+@supports (animation-timeline: view()) {
+  .convites { view-timeline: --convites; }
+  .bilhetes li[style] { animation: usa linear both; animation-timeline: --convites; animation-range: cover calc(32% + var(--i) * 4%) cover calc(35% + var(--i) * 4%); }
+  @keyframes usa { to { opacity: .22; scale: .85; translate: 0 6px; } }
+}
+
+/* Fechamento */
+.fechamento { margin-top: clamp(32px, 5vw, 64px); padding: clamp(32px, 6vw, 88px) clamp(24px, 5vw, 72px); border-radius: var(--raio-painel); background: linear-gradient(180deg, var(--pessego-claro), var(--pessego)); text-align: center; }
+.fechamento p { max-width: 36em; margin: var(--espaco-4) auto 0; }
+
+/* Páginas de texto */
+.pagina { padding-block: var(--espaco-2) var(--espaco-8); }
+.faixa { padding: clamp(32px, 4vw, 56px) clamp(24px, 4vw, 56px) 96px; border-radius: var(--raio-painel); background: linear-gradient(180deg, var(--pessego), var(--pessego-claro)); }
+.faixa h1 { max-width: 16em; font-size: clamp(34px, 4.7vw, 60px); line-height: 1.04; letter-spacing: -.03em; }
+.folha { position: relative; max-width: 800px; margin: -64px auto 0; padding: clamp(24px, 4vw, 48px); border-radius: var(--raio-painel); background: var(--fundo-cartao); box-shadow: var(--sombra-suave); overflow-wrap: break-word; }
+.folha h2 { margin: var(--espaco-8) 0 var(--espaco-2); font-size: 24px; line-height: 30px; letter-spacing: -.01em; }
+.folha > :first-child { margin-top: 0; }
+.folha h3 { margin: var(--espaco-6) 0 var(--espaco-1); font-size: 18px; line-height: 24px; }
+.folha p, .folha ul, .folha ol { margin: 0 0 var(--espaco-4); }
+.folha li { margin-bottom: var(--espaco-2); }
+.tabela { margin-bottom: var(--espaco-4); overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: var(--espaco-2); text-align: left; vertical-align: top; }
+td { border-top: 1px solid color-mix(in srgb, var(--texto) 14%, transparent); }
+th { font-weight: 600; }
+
+.rodape { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--espaco-2) var(--espaco-6); padding-block: var(--espaco-6) var(--espaco-8); font-size: 13px; line-height: 18px; }
+.rodape a { display: inline-flex; align-items: center; min-height: var(--toque-minimo); }
+
+/* O marcador só aparece com margem para ele, sem encostar nos cartões. */
+@media (max-width: 1440px) {
+  .marcador { display: none; }
+}
+/* Até 1080 px, as seções empilham: com duas colunas o cartão sairia da página. */
+@media (max-width: 1080px) {
+  .secao { grid-template-columns: minmax(0, 1fr); }
+  .secao-invertida .secao-texto { order: 0; }
+  .cartao-salta, .secao-invertida .cartao-salta { top: auto; bottom: 0; width: min(92%, 340px); translate: -50% 0; }
+}
+@media (max-width: 720px) {
+  .celular-grande { width: min(62%, 260px); }
+  /* No celular, os frascos se abrem um pouco mais para os lados, para não ficarem todos atrás do aparelho. */
+  .palco { --u: 1.3cqw; }
+}
+/* Sem unidade de contêiner (navegadores antigos), a borrifada usa a largura da tela. */
+@supports not (width: 1cqw) {
+  .palco { --u: 1vw; }
+}
+
+/* Quem pede menos movimento vê o feed parado. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
