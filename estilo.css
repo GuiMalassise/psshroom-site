@@ -108,9 +108,10 @@ mark { padding: 0 var(--espaco-1); border-radius: var(--raio-tag); background: v
 .grifo { padding-inline: .06em; background: linear-gradient(transparent 56%, var(--verde-lima) 56%, var(--verde-lima) 90%, transparent 90%); -webkit-box-decoration-break: clone; box-decoration-break: clone; }
 .legenda { margin-top: var(--espaco-2); text-align: center; font-size: 13px; line-height: 18px; }
 .secao-texto > p:not(.sobrelinha) { max-width: 30em; font-size: 17px; line-height: 26px; }
-.secao ul { max-width: 30em; margin: var(--espaco-6) 0 0; padding: 0; list-style: none; }
-.secao li { display: flex; gap: var(--espaco-4); padding-block: var(--espaco-2); }
-.secao li::before { content: ""; flex: none; width: 16px; height: 1px; margin-top: 11px; background: var(--laranja); }
+/* Os tópicos são etiquetas, como os chips do app: fundo claro sobre a faixa e um ponto laranja. */
+.secao ul { display: flex; flex-wrap: wrap; gap: var(--espaco-2); max-width: 32em; margin: var(--espaco-6) 0 0; padding: 0; list-style: none; }
+.secao li { display: inline-flex; align-items: center; gap: var(--espaco-2); padding: var(--espaco-2) var(--espaco-4); border-radius: var(--raio-botao); background: var(--fundo); box-shadow: 0 4px 12px color-mix(in srgb, var(--marrom) 8%, transparent); font-size: 14px; line-height: 20px; }
+.secao li::before { content: ""; flex: none; width: 7px; height: 7px; border-radius: 50%; background: var(--laranja); }
 .vitrine { position: relative; display: grid; justify-items: center; padding-block: var(--espaco-6); }
 .celular-secao { z-index: 1; width: clamp(210px, 20vw, 260px); }
 .cartao-salta { z-index: 2; }
@@ -125,11 +126,8 @@ mark { padding: 0 var(--espaco-1); border-radius: var(--raio-tag); background: v
 .celular-uso:hover * { animation-play-state: paused; }
 @keyframes uso-resumo { 0%, 21.5% { translate: 100% 0; } 24%, 60.5% { translate: 0 0; } 63%, 100% { translate: 100% 0; } }
 @keyframes uso-rola { 0%, 37.5% { translate: 0 0; } 53%, 63% { translate: 0 -31.5%; } 64%, 100% { translate: 0 0; } }
-/* O feed rolando: a janela é a área que rola na tela do app (de 56 a 732 px numa tela de 812). A faixa para
-   em cada tipo de post: foto da Bia, foto do Rafael, resenhas e posts só de texto; depois volta ao topo. */
-.feed-janela { position: absolute; left: 0; right: 0; top: 6.897%; height: 83.25%; overflow: hidden; }
-.feed-faixa { animation: feed-rola 24s ease-in-out infinite; }
-@keyframes feed-rola { 0%, 10% { translate: 0 0; } 15%, 25% { translate: 0 -10%; } 30%, 40% { translate: 0 -28.8%; } 45%, 55% { translate: 0 -46.9%; } 62%, 80% { translate: 0 -79.25%; } 88%, 100% { translate: 0 0; } }
+/* O feed em vídeo dentro do celular (montado de capturas reais do app com pessoas de exemplo). */
+.feed-video { display: block; width: 100%; height: auto; aspect-ratio: 750 / 1624; background: var(--off-white); }
 @keyframes uso-quero { 0%, 68% { opacity: 0; } 70%, 95% { opacity: 1; } 98%, 100% { opacity: 0; } }
 /* Atrás do celular: uma aura na cor da faixa, que respira, e frascos do tema da seção flutuando devagar. */
 .vitrine::before { content: ""; position: absolute; left: 50%; top: 50%; width: min(120%, 620px); aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, color-mix(in srgb, var(--faixa), var(--branco) 55%) 0%, transparent 65%); translate: -50% -50%; animation: respira 9s ease-in-out infinite alternate; }
@@ -225,14 +223,25 @@ th { font-weight: 600; }
   .celular-grande { width: min(62%, 260px); }
   /* No celular, os frascos se abrem um pouco mais para os lados, para não ficarem todos atrás do aparelho. */
   .palco { --u: 1.3cqw; }
+  /* Seções no celular: título, depois o aparelho com os frascos, e só então o texto e as etiquetas. */
+  .secao { gap: 0; padding: var(--espaco-8) var(--espaco-4); }
+  .secao-texto { display: contents; }
+  .secao .sobrelinha { order: 1; }
+  .secao h2 { order: 2; margin-bottom: 0; }
+  .secao .vitrine { order: 3; margin-block: var(--espaco-4); }
+  .secao-texto > p:not(.sobrelinha) { order: 4; }
+  .secao ul { order: 5; margin-top: var(--espaco-4); }
+  .voa { left: calc(50% + var(--x) * 1.3); height: calc(var(--h) * .75); }
 }
 /* Sem unidade de contêiner (navegadores antigos), a borrifada usa a largura da tela. */
 @supports not (width: 1cqw) {
   .palco { --u: 1vw; }
 }
 
-/* Quem pede menos movimento vê o feed parado. */
+/* Quem pede menos movimento vê tudo parado: as animações param, e o vídeo do feed dá lugar à imagem da primeira tela. */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
+  .feed-video { display: none; }
+  .tela:has(.feed-video) { background: url(/app/feed-video/feed.jpg) center / cover; }
 }
