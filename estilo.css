@@ -93,6 +93,7 @@ mark { padding: 0 var(--espaco-1); border-radius: var(--raio-tag); background: v
 /* Seções: cada uma num painel com uma cor do logo, em tom claro; o texto de um lado e, do outro,
    o celular com o cartão daquela parte saltando da tela. Topo é fresco, coração é floral, base é quente. */
 .secao { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: clamp(32px, 6vw, 96px); margin-top: var(--espaco-6); padding: clamp(40px, 6vw, 88px) clamp(24px, 6vw, 96px); border-radius: var(--raio-painel); background: var(--faixa); overflow-x: clip; scroll-margin-top: 32px; }
+.secao-vinho { --faixa: color-mix(in srgb, var(--magenta-vinho) 10%, var(--fundo)); }
 .secao-lima { --faixa: color-mix(in srgb, var(--verde-lima) 24%, var(--fundo)); }
 .secao-azul { --faixa: color-mix(in srgb, var(--azul-bebe) 36%, var(--fundo)); }
 .secao-rosa { --faixa: color-mix(in srgb, var(--acorde-floral) 32%, var(--fundo)); }
@@ -103,6 +104,8 @@ mark { padding: 0 var(--espaco-1); border-radius: var(--raio-tag); background: v
 .secao h2 { margin: var(--espaco-2) 0 var(--espaco-4); font-size: clamp(32px, 3.8vw, 52px); }
 /* A segunda linha do título fica apagada: a cor do texto meio transparente, para valer em qualquer faixa. */
 .apagado { color: color-mix(in srgb, currentColor 68%, transparent); }
+/* Grifo de marca-texto em verde-lima, atrás da palavra: a cor aparece e o texto continua marrom e legível. */
+.grifo { padding-inline: .06em; background: linear-gradient(transparent 56%, var(--verde-lima) 56%, var(--verde-lima) 90%, transparent 90%); -webkit-box-decoration-break: clone; box-decoration-break: clone; }
 .legenda { margin-top: var(--espaco-2); text-align: center; font-size: 13px; line-height: 18px; }
 .secao-texto > p:not(.sobrelinha) { max-width: 30em; font-size: 17px; line-height: 26px; }
 .secao ul { max-width: 30em; margin: var(--espaco-6) 0 0; padding: 0; list-style: none; }
@@ -122,6 +125,11 @@ mark { padding: 0 var(--espaco-1); border-radius: var(--raio-tag); background: v
 .celular-uso:hover * { animation-play-state: paused; }
 @keyframes uso-resumo { 0%, 21.5% { translate: 100% 0; } 24%, 60.5% { translate: 0 0; } 63%, 100% { translate: 100% 0; } }
 @keyframes uso-rola { 0%, 37.5% { translate: 0 0; } 53%, 63% { translate: 0 -31.5%; } 64%, 100% { translate: 0 0; } }
+/* O feed rolando: a janela é a área que rola na tela do app (de 56 a 732 px numa tela de 812). A faixa para
+   em cada tipo de post: foto da Bia, foto do Rafael, resenhas e posts só de texto; depois volta ao topo. */
+.feed-janela { position: absolute; left: 0; right: 0; top: 6.897%; height: 83.25%; overflow: hidden; }
+.feed-faixa { animation: feed-rola 24s ease-in-out infinite; }
+@keyframes feed-rola { 0%, 10% { translate: 0 0; } 15%, 25% { translate: 0 -10%; } 30%, 40% { translate: 0 -28.8%; } 45%, 55% { translate: 0 -46.9%; } 62%, 80% { translate: 0 -79.25%; } 88%, 100% { translate: 0 0; } }
 @keyframes uso-quero { 0%, 68% { opacity: 0; } 70%, 95% { opacity: 1; } 98%, 100% { opacity: 0; } }
 /* Atrás do celular: uma aura na cor da faixa, que respira, e frascos do tema da seção flutuando devagar. */
 .vitrine::before { content: ""; position: absolute; left: 50%; top: 50%; width: min(120%, 620px); aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, color-mix(in srgb, var(--faixa), var(--branco) 55%) 0%, transparent 65%); translate: -50% -50%; animation: respira 9s ease-in-out infinite alternate; }
@@ -195,8 +203,13 @@ th, td { padding: var(--espaco-2); text-align: left; vertical-align: top; }
 td { border-top: 1px solid color-mix(in srgb, var(--texto) 14%, transparent); }
 th { font-weight: 600; }
 
-.rodape { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--espaco-2) var(--espaco-6); padding-block: var(--espaco-6) var(--espaco-8); font-size: 13px; line-height: 18px; }
+/* Rodapé: tudo centralizado, em linhas curtas; razão social e CNPJ nunca se partem no meio. */
+.rodape { display: grid; justify-items: center; gap: var(--espaco-2); padding-block: var(--espaco-8); text-align: center; font-size: 13px; line-height: 18px; }
 .rodape a { display: inline-flex; align-items: center; min-height: var(--toque-minimo); }
+.rodape-lema { max-width: 22em; font-size: 15px; line-height: 22px; }
+.rodape nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 0 var(--espaco-6); }
+.rodape-legal { max-width: 36em; padding-top: var(--espaco-4); border-top: 1px solid color-mix(in srgb, var(--texto) 15%, transparent); color: color-mix(in srgb, var(--texto) 80%, transparent); }
+.rodape-legal span { display: inline-block; white-space: nowrap; }
 
 /* O marcador só aparece com margem para ele, sem encostar nos cartões. */
 @media (max-width: 1440px) {
