@@ -185,6 +185,27 @@ mark { padding: 0 var(--espaco-1); border-radius: var(--raio-tag); background: v
 .fechamento { margin-top: clamp(32px, 5vw, 64px); padding: clamp(32px, 6vw, 88px) clamp(24px, 5vw, 72px); border-radius: var(--raio-painel); background: linear-gradient(180deg, var(--pessego-claro), var(--pessego)); text-align: center; }
 .fechamento p { max-width: 36em; margin: var(--espaco-4) auto 0; }
 
+/* Lista de espera (Fatia 3): o formulário numa folha branca dentro do fechamento. */
+.lista { display: grid; gap: var(--espaco-4); max-width: 520px; margin: var(--espaco-6) auto 0; padding: clamp(20px, 4vw, 32px); border-radius: var(--raio-card); background: var(--fundo-cartao); box-shadow: var(--sombra-suave); text-align: left; }
+.lista-campo { display: grid; gap: var(--espaco-1); font-weight: 600; }
+.lista-campo small { font-size: 13px; font-weight: 400; }
+.lista-campo input { min-height: var(--toque-minimo); padding: 0 var(--espaco-4); border: 1px solid color-mix(in srgb, var(--texto) 30%, transparent); border-radius: var(--raio-botao); background: var(--fundo); color: var(--texto); font: 400 16px/22px var(--font-texto); }
+.lista-marca { display: flex; align-items: flex-start; gap: var(--espaco-2); font-size: 14px; line-height: 20px; }
+.lista-marca input { flex: none; width: 22px; height: 22px; margin: 0; accent-color: var(--laranja); }
+.lista .botao { justify-self: start; border: 0; font: 600 15px/22px var(--font-texto); cursor: pointer; }
+.lista .botao:disabled { opacity: .6; cursor: progress; }
+.lista[hidden] { display: none; }
+.confirmar h1 { font-size: clamp(34px, 4.7vw, 60px); line-height: 1.04; letter-spacing: -.03em; }
+.confirmar .lista { margin-top: var(--espaco-4); }
+.confirmar > p:last-child .botao { margin-top: var(--espaco-2); }
+.botao-claro { background: var(--fundo-cartao); color: var(--texto); box-shadow: var(--sombra-suave); }
+.lista-dica { margin: 0; font-size: 14px; line-height: 20px; }
+.lista input:focus-visible { outline: 2px solid var(--foco); outline-offset: 2px; }
+/* Campo que só robô preenche: fora da tela, fora do Tab e do leitor de tela. */
+.lista-isca { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+.fechamento .lista-aviso { font-weight: 600; }
+.lista-aviso:empty { display: none; }
+
 /* Páginas de texto */
 .pagina { padding-block: var(--espaco-2) var(--espaco-8); }
 .faixa { padding: clamp(32px, 4vw, 56px) clamp(24px, 4vw, 56px) 96px; border-radius: var(--raio-painel); background: linear-gradient(180deg, var(--pessego), var(--pessego-claro)); }

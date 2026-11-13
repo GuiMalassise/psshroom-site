@@ -19,7 +19,7 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Psshroom. Nem todo mundo vai entrar. Só por convite.">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="/estilo.css?v=5421c357">
+<link rel="stylesheet" href="/estilo.css?v=e990b37e">
 </head>
 <body>
 <header class="topo">
@@ -304,14 +304,84 @@
 </div>
 </section>
 
-<section class="fechamento">
-<h2>O convite não se pede.<br>Ele chega.</h2>
-<p>A entrada é só por convite, para pessoas com 18 anos ou mais. As notas não estão à venda, a publicidade nunca muda uma avaliação e os seus dados não são vendidos.</p>
+<section class="fechamento" id="lista-de-espera" aria-labelledby="lista-titulo">
+<h2 id="lista-titulo">Tem nome na lista?<br><span class="apagado">Ainda não? Corre.</span></h2>
+<p>Convite aqui é que nem perfume bom: acaba rápido 🫰🏾</p>
+<p>Se inscreva e talvez você seja um dos primeiros a abrir o frasco no quarto mais disputado da internet 💦</p>
+<form class="lista" data-api="https://xpfrkwinlpfzlpfljmjr.supabase.co" data-chave="sb_publishable_d63nNu78k8lpeYeUArx8Aw_-6n-EIN1" novalidate>
+<label class="lista-campo"><span>Nome</span><input name="nome" autocomplete="name" maxlength="80" required></label>
+<label class="lista-campo"><span>E-mail</span><input name="email" type="email" autocomplete="email" maxlength="254" required></label>
+<label class="lista-campo"><span>@ do Instagram <small>(se quiser)</small></span><input name="instagram" autocomplete="off" autocapitalize="none" spellcheck="false" maxlength="31"></label>
+<label class="lista-isca" aria-hidden="true">Não preencha <input name="site" tabindex="-1" autocomplete="off"></label>
+<label class="lista-marca"><input type="checkbox" name="maior_de_idade" required><span>Tenho 18 anos ou mais.</span></label>
+<label class="lista-marca"><input type="checkbox" name="aceite" required><span>Aceito que o Psshroom guarde o meu nome, e-mail e @ só para me chamar quando houver convite. Eles são apagados em até 90 dias depois do convite, ou em até 12 meses se ele não sair (em até 48 horas, se eu não confirmar o e-mail). Para sair antes, escreva para <a href="mailto:privacidade@psshroom.com.br">privacidade@psshroom.com.br</a>.</span></label>
+<button class="botao" type="submit">Entrar na lista</button>
+</form>
+<p class="lista-aviso" id="lista-aviso" role="status" aria-live="polite"></p>
+<p>As notas não estão à venda, a publicidade nunca muda uma avaliação e os seus dados não são vendidos.</p>
 <div class="lojas">
 <span class="loja"><small>Em breve na</small> App Store</span>
 <span class="loja"><small>Em breve no</small> Google Play</span>
 </div>
 </section>
+<script>
+(() => {
+  // A versão do texto do aceite acima: mudou o texto, muda a data (o banco guarda qual texto cada pessoa aceitou).
+  const VERSAO_ACEITE = "2026-11-12";
+  const form = document.querySelector(".lista");
+  const aviso = document.querySelector(".lista-aviso");
+  const botao = form.querySelector("button");
+  const frases = {
+    nome_invalido: "Escreva o seu nome.",
+    email_invalido: "Confira o e-mail.",
+    instagram_invalido: "Confira o @ do Instagram: só letras, números, ponto e sublinhado.",
+    falta_idade: "O Psshroom é só para quem tem 18 anos ou mais.",
+    falta_aceite: "Para entrar na lista, marque o aceite do uso do nome e do e-mail.",
+    muitos_envios: "Muitos pedidos agora. Tente de novo daqui a uma hora.",
+    email_sem_config: "A lista de espera está fechada agora. Tente de novo mais tarde.",
+  };
+  const campo = { nome_invalido: "nome", email_invalido: "email", instagram_invalido: "instagram", falta_idade: "maior_de_idade", falta_aceite: "aceite" };
+  // O campo com problema fica marcado e ligado ao aviso: o leitor de tela lê o erro junto com o campo.
+  function avisar(hint) {
+    aviso.textContent = frases[hint] ?? "Não deu para enviar agora. Tente de novo em instantes.";
+    const errado = form.elements[campo[hint]];
+    if (!errado) return;
+    errado.setAttribute("aria-invalid", "true");
+    errado.setAttribute("aria-describedby", "lista-aviso");
+    errado.focus();
+  }
+  form.addEventListener("submit", async (evento) => {
+    evento.preventDefault();
+    const f = form.elements;
+    for (const c of form.querySelectorAll("[aria-invalid]")) c.removeAttribute("aria-invalid"), c.removeAttribute("aria-describedby");
+    const local =
+      f.nome.value.trim().length < 2 ? "nome_invalido"
+      : !f.email.value.trim() || !f.email.checkValidity() ? "email_invalido"
+      : !f.maior_de_idade.checked ? "falta_idade"
+      : !f.aceite.checked ? "falta_aceite" : null;
+    if (local) return avisar(local);
+    botao.disabled = true;
+    aviso.textContent = "Enviando…";
+    try {
+      const r = await fetch(`${form.dataset.api}/rest/v1/rpc/entrar_lista_espera`, {
+        method: "POST",
+        headers: { apikey: form.dataset.chave, "Content-Type": "application/json" },
+        body: JSON.stringify({ nome: f.nome.value, email: f.email.value, instagram: f.instagram.value || null,
+          maior_de_idade: true, aceite: true, versao_aceite: VERSAO_ACEITE, site: f.site.value || null }),
+      });
+      if (r.ok) {
+        form.hidden = true;
+        aviso.textContent = "Quase lá! Se este e-mail ainda não estiver confirmado, mandamos um link para ele. Abra em até 24 horas e toque em Confirmar. Não chegou? Olhe o spam.";
+        return;
+      }
+      avisar((await r.json().catch(() => ({}))).hint);
+    } catch {
+      aviso.textContent = "Sem conexão. Confira a internet e tente de novo.";
+    }
+    botao.disabled = false;
+  });
+})();
+</script>
 
 </div>
 

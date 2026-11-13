@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Confirmar e-mail | Psshroom</title>
+<meta name="description" content="Confirme o seu e-mail na lista de espera do Psshroom.">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/png" href="/marca/icone.png">
+<link rel="apple-touch-icon" href="/marca/icone.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Psshroom">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:title" content="Confirmar e-mail | Psshroom">
+<meta property="og:description" content="Confirme o seu e-mail na lista de espera do Psshroom.">
+<meta property="og:image" content="https://psshroom.com.br/marca/compartilhar.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Psshroom. Nem todo mundo vai entrar. Só por convite.">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="/estilo.css?v=e990b37e">
+</head>
+<body>
+<header class="topo">
+<a class="logo" href="/"><img src="/marca/simbolo.svg" alt="" height="32"><img src="/marca/texto-marrom.svg" alt="Psshroom." height="24"></a>
+<nav aria-label="Principal">
+<a href="/suporte/">Suporte</a>
+</nav>
+</header>
+<main>
+<div class="grade">
+<section class="fechamento confirmar" data-api="https://xpfrkwinlpfzlpfljmjr.supabase.co" data-chave="sb_publishable_d63nNu78k8lpeYeUArx8Aw_-6n-EIN1">
+<h1 id="confirmar-titulo" tabindex="-1">Abrindo o seu link…</h1>
+<p id="confirmar-texto" role="status">Só um instante.</p>
+<form class="lista" hidden novalidate>
+<p class="lista-dica">Confira os seus dados. É assim que eles aparecem para a gente quando abrir uma vaga.</p>
+<label class="lista-campo"><span>Nome</span><input name="nome" autocomplete="name" maxlength="80" required></label>
+<label class="lista-campo"><span>@ do Instagram <small>(se quiser)</small></span><input name="instagram" autocomplete="off" autocapitalize="none" spellcheck="false" maxlength="31"></label>
+<button class="botao" type="submit">Confirmar</button>
+</form>
+<p class="lista-aviso" id="lista-aviso" role="status" aria-live="polite"></p>
+<p><a class="botao botao-claro" href="/">Ir para o início</a></p>
+</section>
+</div>
+<script>
+(() => {
+  // Página do link do e-mail da lista de espera: /lista/confirmar/#t=<código>. O código vem depois do "#", que o
+  // navegador não manda para nenhum servidor, e sai do endereço assim que é lido. Abrir a página só MOSTRA o pedido:
+  // confirmar exige tocar no botão (filtros de e-mail de empresa abrem os links sozinhos). Quem confirma escolhe o
+  // nome e o @ — o que veio do formulário é só uma sugestão.
+  const secao = document.querySelector(".confirmar");
+  const titulo = document.getElementById("confirmar-titulo");
+  const texto = document.getElementById("confirmar-texto");
+  const form = secao.querySelector("form");
+  const aviso = document.getElementById("lista-aviso");
+  const botao = form.querySelector("button");
+  const token = new URLSearchParams(location.hash.slice(1)).get("t");
+  history.replaceState(null, "", location.pathname);
+  const mostrar = (t, p) => { titulo.textContent = t; texto.textContent = p; titulo.focus(); };
+  const rpc = (funcao, corpo) => fetch(`${secao.dataset.api}/rest/v1/rpc/${funcao}`, {
+    method: "POST",
+    headers: { apikey: secao.dataset.chave, "Content-Type": "application/json" },
+    body: JSON.stringify(corpo),
+  });
+  const vencido = () => mostrar("Este link não vale mais", "Ele já foi usado ou passou de 24 horas. Se você já confirmou, está tudo certo. Se não, é só se inscrever de novo no site.");
+  const semConexao = () => mostrar("Não deu para abrir agora", "Confira a internet e abra o link do e-mail de novo.");
+  if (!token) return mostrar("Link incompleto", "Abra de novo o link do e-mail, do jeito que ele chegou.");
+
+  rpc("pedido_da_lista", { token })
+    .then((r) => (r.ok ? r.json() : Promise.reject()))
+    .then(([pedido]) => {
+      if (!pedido) return vencido();
+      form.elements.nome.value = pedido.nome ?? "";
+      form.elements.instagram.value = pedido.instagram ? `@${pedido.instagram}` : "";
+      form.hidden = false;
+      mostrar("Falta um toque", "Confirme que este e-mail é seu.");
+    })
+    .catch(semConexao);
+
+  const frases = {
+    nome_invalido: "Escreva o seu nome.",
+    instagram_invalido: "Confira o @ do Instagram: só letras, números, ponto e sublinhado.",
+  };
+  form.addEventListener("submit", async (evento) => {
+    evento.preventDefault();
+    const f = form.elements;
+    for (const c of form.querySelectorAll("[aria-invalid]")) c.removeAttribute("aria-invalid"), c.removeAttribute("aria-describedby");
+    const marcar = (campo, frase) => {
+      aviso.textContent = frase;
+      f[campo].setAttribute("aria-invalid", "true");
+      f[campo].setAttribute("aria-describedby", "lista-aviso");
+      f[campo].focus();
+    };
+    if (f.nome.value.trim().length < 2) return marcar("nome", frases.nome_invalido);
+    botao.disabled = true;
+    aviso.textContent = "Confirmando…";
+    try {
+      const r = await rpc("confirmar_lista_espera", { token, nome: f.nome.value, instagram: f.instagram.value || null });
+      if (!r.ok) {
+        const hint = (await r.json().catch(() => ({}))).hint;
+        botao.disabled = false;
+        return frases[hint] ? marcar(hint === "nome_invalido" ? "nome" : "instagram", frases[hint]) : (aviso.textContent = "Não deu para confirmar agora. Tente de novo.");
+      }
+      form.hidden = true;
+      aviso.textContent = "";
+      if (await r.json()) mostrar("Pronto, você está na lista 🫰🏾", "Se um convite sair para você, ele chega neste e-mail.");
+      else vencido();
+    } catch {
+      botao.disabled = false;
+      aviso.textContent = "Sem conexão. Confira a internet e tente de novo.";
+    }
+  });
+})();
+</script>
+
+</main>
+<footer class="rodape">
+<a class="logo" href="/"><img src="/marca/simbolo.svg" alt="" height="32"><img src="/marca/texto-marrom.svg" alt="Psshroom." height="24"></a>
+<p class="rodape-lema">Mais do que perfumes. Pessoas, histórias e conexões.</p>
+<nav aria-label="Rodapé">
+<a href="/suporte/">Suporte</a>
+<a href="mailto:contato@psshroom.com.br">contato@psshroom.com.br</a>
+</nav>
+<p class="rodape-legal"><span>Benalis Tecnologia e Soluções Digitais Ltda.</span> <span>CNPJ 32.125.128/0001-78</span></p>
+</footer>
+</body>
+</html>
