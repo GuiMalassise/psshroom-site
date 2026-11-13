@@ -1,0 +1,20 @@
+# O plano grátis do Supabase pausa o banco depois de 7 dias sem uso, e a lista de espera do site para junto.
+# Uma leitura por dia, sem efeito nenhum: pede um pedido da lista que não existe (só a chave publicável, que já está no site).
+name: Manter o banco acordado
+
+on:
+  schedule:
+    - cron: "17 12 * * *"
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  tocar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - run: >
+          curl -fsS --retry 3 --retry-delay 30
+          "https://xpfrkwinlpfzlpfljmjr.supabase.co/rest/v1/rpc/pedido_da_lista?token=toque"
+          -H "apikey: sb_publishable_d63nNu78k8lpeYeUArx8Aw_-6n-EIN1"
