@@ -19,7 +19,7 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Psshroom. Nem todo mundo vai entrar. Só por convite.">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="/estilo.css?v=e990b37e">
+<link rel="stylesheet" href="/estilo.css?v=83951056">
 </head>
 <body>
 <header class="topo">
@@ -317,6 +317,11 @@
 <label class="lista-marca"><input type="checkbox" name="aceite" required><span>Aceito que o Psshroom guarde o meu nome, e-mail e @ só para me chamar quando houver convite. Eles são apagados em até 90 dias depois do convite, ou em até 12 meses se ele não sair (em até 48 horas, se eu não confirmar o e-mail). Para sair antes, escreva para <a href="mailto:privacidade@psshroom.com.br">privacidade@psshroom.com.br</a>.</span></label>
 <button class="botao" type="submit">Entrar na lista</button>
 </form>
+<div class="lista lista-enviado" id="lista-enviado" role="region" aria-labelledby="lista-enviado-titulo" hidden>
+<h3 id="lista-enviado-titulo" tabindex="-1">Olha o seu e-mail 💌</h3>
+<p>Se este e-mail ainda não estava confirmado, mandamos um link para ele. Abra em até 24 horas e toque em <b>Confirmar</b> para garantir o seu nome na lista.</p>
+<p class="lista-dica">Não chegou em alguns minutos? Olhe o spam e a aba Promoções.</p>
+</div>
 <p class="lista-aviso" id="lista-aviso" role="status" aria-live="polite"></p>
 <p>As notas não estão à venda, a publicidade nunca muda uma avaliação e os seus dados não são vendidos.</p>
 <div class="lojas">
@@ -328,7 +333,7 @@
 (() => {
   // A versão do texto do aceite acima: mudou o texto, muda a data (o banco guarda qual texto cada pessoa aceitou).
   const VERSAO_ACEITE = "2026-11-12";
-  const form = document.querySelector(".lista");
+  const form = document.querySelector("form.lista");
   const aviso = document.querySelector(".lista-aviso");
   const botao = form.querySelector("button");
   const frases = {
@@ -370,8 +375,13 @@
           maior_de_idade: true, aceite: true, versao_aceite: VERSAO_ACEITE, site: f.site.value || null }),
       });
       if (r.ok) {
+        // O mesmo cartão para todo e-mail (já na lista ou não): quem envia não descobre quem está inscrito.
+        const enviado = document.querySelector("#lista-enviado");
         form.hidden = true;
-        aviso.textContent = "Quase lá! Se este e-mail ainda não estiver confirmado, mandamos um link para ele. Abra em até 24 horas e toque em Confirmar. Não chegou? Olhe o spam.";
+        aviso.textContent = "";
+        enviado.hidden = false;
+        enviado.querySelector("h3").focus({ preventScroll: true });
+        enviado.scrollIntoView({ block: "center", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
         return;
       }
       avisar((await r.json().catch(() => ({}))).hint);
